@@ -7,46 +7,62 @@
  * value is found or the interval is empty.
  */
 
-function binarySearchRecursive (arr, x, low = 0, high = arr.length - 1) {
-  const mid = Math.floor(low + (high - low) / 2)
+  // I - sorted array and target element
+  // O - index of target element
+  // C - log(n)
+  // E - empty array, target not found
 
-  if (high >= low) {
-    if (arr[mid] === x) {
-      // item found => return its index
-      return mid
-    }
+function binarySearchRecursive (array, target, min, max) {
+  var min = min || 0;
+  var max = max || array.length - 1;
+  var mid = Math.floor((min + max) / 2);
 
-    if (x < arr[mid]) {
-      // arr[mid] is an upper bound for x, so if x is in arr => low <= x < mid
-      return binarySearchRecursive(arr, x, low, mid - 1)
-    } else {
-      // arr[mid] is a lower bound for x, so if x is in arr => mid < x <= high
-      return binarySearchRecursive(arr, x, mid + 1, high)
-    }
-  } else {
-    // if low > high => we have searched the whole array without finding the item
-    return -1
+  if (!array.length) {
+    return null;
+  }
+  if (target === array[mid]) {
+    return mid;
+  }
+  if (min === max) {
+    return null;
+  }
+
+  if (target < array[mid]) {
+    return binarySearchRecursive(array, target, min, mid - 1);
+  }
+  if (target > array[mid]) {
+    return binarySearchRecursive(array, target, mid + 1, max);
   }
 }
-function binarySearchIterative (arr, x, low = 0, high = arr.length - 1) {
-  while (high >= low) {
-    const mid = Math.floor(low + (high - low) / 2)
 
-    if (arr[mid] === x) {
-      // item found => return its index
-      return mid
-    }
+function binarySearchIterative (array, target) {
+  // create 3 pointers
 
-    if (x < arr[mid]) {
-      // arr[mid] is an upper bound for x, so if x is in arr => low <= x < mid
-      high = mid - 1
-    } else {
-      // arr[mid] is a lower bound for x, so if x is in arr => mid < x <= high
-      low = mid + 1
+  // min is the starting index
+  var min = 0;
+  // max is the ending index
+  var max = array.length - 1;
+  // mid is the index between the min and max
+  var mid = Math.floor((min + max) / 2);
+  // iterate using a while loop to continue as long as min is less than or equal to the max index
+  while (min <= max) {
+    // if the target is equal to the element at the mid, return the mid index 
+    if (target === array[mid]) {
+      return mid;
     }
+    // if the target is less than the element at the mid, reassign max to be one less than the mid
+    if (target < array[mid]) {
+      max = mid - 1;
+    }
+    // if the target is greater than the element at the mid, reassign min to be one greater than the mid
+    if (target > array[mid]) {
+      min = mid + 1;
+    }
+    // reassign the mid after reassigning the min or max
+    mid = Math.floor((min + max) / 2);
   }
-  // if low > high => we have searched the whole array without finding the item
-  return -1
+  // when the loop finishes, if no element was found, return null
+  return null;
 }
 
 /* ---------------------------------- Test ---------------------------------- */
